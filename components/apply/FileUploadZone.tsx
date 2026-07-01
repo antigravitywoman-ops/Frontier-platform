@@ -72,12 +72,12 @@ export function FileUploadZone({
 
   return (
     <div className="flex h-full flex-col">
-      <div className="mb-3">
+      <div className="mb-2">
         <p className="text-sm font-light text-pure-white">
           {label}
           {required ? <span className="text-pure-white/90"> *</span> : null}
         </p>
-        <p className="mt-1 text-xs leading-relaxed text-pure-white/58">{description}</p>
+        <p className="mt-0.5 text-xs leading-relaxed text-pure-white/58">{description}</p>
       </div>
 
       <div
@@ -87,7 +87,7 @@ export function FileUploadZone({
         }}
         onDragLeave={() => setIsDragging(false)}
         onDrop={handleDrop}
-        className={`relative flex flex-1 flex-col rounded-[1.1rem] border-2 border-dashed px-5 py-8 transition-all ${
+        className={`relative flex flex-1 flex-col rounded-[1.1rem] border-2 border-dashed px-4 py-5 transition-all ${
           isDragging
             ? "border-pure-white/45 bg-pure-white/14 shadow-inner"
             : hasFile

@@ -1,6 +1,7 @@
 "use client";
 
 import { FileUploadZone } from "@/components/apply/FileUploadZone";
+import { applyScrollHiddenClassName } from "@/components/apply/wizard/ApplyField";
 import type { ApplicationDocumentKey, ApplicationDocuments } from "@/lib/apply/types";
 
 const DOCUMENT_FIELDS: {
@@ -29,7 +30,8 @@ type StepDocumentsProps = {
 
 export function StepDocuments({ value, onChange }: StepDocumentsProps) {
   return (
-    <div className="grid h-full min-h-0 gap-4 lg:grid-cols-2">
+    <div className={`flex min-h-0 flex-1 flex-col ${applyScrollHiddenClassName}`}>
+      <div className="grid gap-2 lg:grid-cols-2">
       {DOCUMENT_FIELDS.map((field) => (
         <FileUploadZone
           key={field.key}
@@ -47,6 +49,7 @@ export function StepDocuments({ value, onChange }: StepDocumentsProps) {
           onChange={(file) => onChange({ ...value, [field.key]: file })}
         />
       ))}
+      </div>
     </div>
   );
 }

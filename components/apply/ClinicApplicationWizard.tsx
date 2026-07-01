@@ -184,9 +184,9 @@ export function ClinicApplicationWizard() {
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={transition}
-        className="flex flex-col"
+        className="flex min-h-0 flex-1 flex-col"
       >
-        <div>
+        <div className="flex min-h-0 flex-1 flex-col">
         {step === 1 ? (
           <StepPracticeInfo
             value={state.practice}

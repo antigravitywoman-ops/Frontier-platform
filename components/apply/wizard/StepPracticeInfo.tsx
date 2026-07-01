@@ -1,6 +1,6 @@
 "use client";
 
-import { ApplyField, applyInputClassName } from "@/components/apply/wizard/ApplyField";
+import { ApplyField, applyFormCardClassName, applyInputClassName } from "@/components/apply/wizard/ApplyField";
 import { ApplyTabs } from "@/components/apply/wizard/ApplyTabs";
 import { PRACTICE_TABS, type PracticeTabId } from "@/lib/apply/practice-tabs";
 import type { PracticeInfo } from "@/lib/apply/types";
@@ -23,7 +23,7 @@ export function StepPracticeInfo({
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex min-h-0 flex-1 flex-col">
       <ApplyTabs
         tabs={[...PRACTICE_TABS]}
         activeId={activeTab}
@@ -33,12 +33,9 @@ export function StepPracticeInfo({
         className="shrink-0"
       />
 
-      <div
-        role="tabpanel"
-        className="mt-4 rounded-[1.25rem] border border-pure-white/15 bg-pure-white/8 p-4 backdrop-blur-md sm:p-5"
-      >
+      <div role="tabpanel" className={`mt-2 ${applyFormCardClassName}`}>
         {activeTab === "contact" ? (
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-2 sm:grid-cols-2">
             <ApplyField label="First name" htmlFor="firstName">
               <input
                 id="firstName"
@@ -85,7 +82,7 @@ export function StepPracticeInfo({
         ) : null}
 
         {activeTab === "practice" ? (
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-2 sm:grid-cols-2">
             <ApplyField label="Clinic name" htmlFor="clinicName" className="sm:col-span-2">
               <input
                 id="clinicName"
@@ -146,7 +143,7 @@ export function StepPracticeInfo({
         ) : null}
 
         {activeTab === "credentials" ? (
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
             <ApplyField label="NPI number" htmlFor="npi" optional>
               <input
                 id="npi"
@@ -176,7 +173,7 @@ export function StepPracticeInfo({
         ) : null}
 
         {activeTab === "address" ? (
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-2 sm:grid-cols-2">
             <ApplyField label="Street address" htmlFor="address1" className="sm:col-span-2">
               <input
                 id="address1"
@@ -205,7 +202,7 @@ export function StepPracticeInfo({
                 className={applyInputClassName}
               />
             </ApplyField>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-2">
               <ApplyField label="State" htmlFor="state">
                 <input
                   id="state"

@@ -1,6 +1,6 @@
 "use client";
 
-import { ApplyField, applyInputClassName, applySelectClassName } from "@/components/apply/wizard/ApplyField";
+import { ApplyField, applyFormCardClassName, applyInputClassName, applySelectClassName } from "@/components/apply/wizard/ApplyField";
 import type { BankingInfo } from "@/lib/apply/types";
 
 type StepBankingProps = {
@@ -14,9 +14,9 @@ export function StepBanking({ value, onChange }: StepBankingProps) {
   }
 
   return (
-    <div className="flex h-full min-h-0 flex-col gap-4">
-      <div className="shrink-0 rounded-[1.25rem] border border-pure-white/18 bg-pure-white/10 p-5 backdrop-blur-md">
-        <div className="flex gap-4">
+    <div className="flex min-h-0 flex-1 flex-col gap-2">
+      <div className="shrink-0 rounded-[1.25rem] border border-pure-white/18 bg-pure-white/10 p-4 backdrop-blur-md">
+        <div className="flex gap-3">
           <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-pure-white/15 text-pure-white">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path
@@ -35,8 +35,8 @@ export function StepBanking({ value, onChange }: StepBankingProps) {
         </div>
       </div>
 
-      <div className="min-h-0 flex-1 rounded-[1.25rem] border border-pure-white/15 bg-pure-white/8 p-5 backdrop-blur-md sm:p-6">
-        <div className="grid gap-4 sm:grid-cols-2">
+      <div className={applyFormCardClassName}>
+        <div className="grid gap-2 sm:grid-cols-2">
           <ApplyField label="Bank name" htmlFor="bankName" className="sm:col-span-2">
             <input
               id="bankName"
@@ -65,8 +65,12 @@ export function StepBanking({ value, onChange }: StepBankingProps) {
               onChange={(e) => update("accountType", e.target.value as BankingInfo["accountType"])}
               className={applySelectClassName}
             >
-              <option value="checking">Checking</option>
-              <option value="savings">Savings</option>
+              <option value="checking" className="bg-[#094f57] text-pure-white">
+                Checking
+              </option>
+              <option value="savings" className="bg-[#094f57] text-pure-white">
+                Savings
+              </option>
             </select>
           </ApplyField>
         </div>

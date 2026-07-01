@@ -5,7 +5,6 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { ApplyTabs } from "@/components/apply/wizard/ApplyTabs";
 import {
-  authGlassDescriptionClassName,
   authGlassEyebrowClassName,
   authGlassTitleClassName,
   glassSecondaryButtonClassName,
@@ -68,7 +67,7 @@ export function ApplyShell({
               <div className="mx-auto max-w-3xl text-center">
                 <p className={authGlassEyebrowClassName}>Clinic application</p>
                 <h1 className={authGlassTitleClassName}>{stepMeta?.label}</h1>
-                <p className={`${authGlassDescriptionClassName} mx-auto mt-2 max-w-md text-balance`}>
+                <p className="mx-auto mt-1.5 font-sans text-xs leading-none text-pure-white/70 whitespace-nowrap">
                   {STEP_DESCRIPTIONS[currentStep]}
                 </p>
                 <ApplyTabs
@@ -77,17 +76,17 @@ export function ApplyShell({
                   onChange={(id) => onTabChange(Number(id))}
                   variant="primary"
                   appearance="glass"
-                  className="mt-4"
+                  className="mt-2"
                 />
               </div>
             </header>
 
-            <div className="flex flex-1 flex-col overflow-hidden px-4 py-3 sm:px-6 sm:py-4" data-tour="apply-form">
-              <div className="mx-auto flex w-full max-w-3xl flex-col">{children}</div>
+            <div className="flex min-h-0 flex-1 flex-col overflow-hidden px-4 py-2 sm:px-6 sm:py-3" data-tour="apply-form">
+              <div className="mx-auto flex min-h-0 w-full max-w-3xl flex-1 flex-col">{children}</div>
             </div>
 
-            <footer className="shrink-0 border-t border-pure-white/10 px-4 py-4 sm:px-6">
-              <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-3">
+            <footer className="shrink-0 border-t border-pure-white/10 px-4 py-3 sm:px-6">
+              <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-2">
                 {footer}
               </div>
             </footer>
