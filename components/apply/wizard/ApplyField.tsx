@@ -1,5 +1,9 @@
 import type { ReactNode } from "react";
 import { HintPopover } from "@/components/ui/Tippy";
+import {
+  authGlassInputClassName,
+  authGlassLabelClassName,
+} from "@/components/auth/AuthShell";
 
 type ApplyFieldProps = {
   label: string;
@@ -21,10 +25,10 @@ export function ApplyField({
   return (
     <div className={className}>
       <div className="mb-2 flex items-center gap-2">
-        <label htmlFor={htmlFor} className="text-sm font-light text-deep-teal">
+        <label htmlFor={htmlFor} className={authGlassLabelClassName}>
           {label}
           {optional ? (
-            <span className="ml-1.5 font-light text-deep-teal/40">(optional)</span>
+            <span className="ml-1.5 font-light text-pure-white/45">(optional)</span>
           ) : null}
         </label>
         {hint ? <HintPopover hint={hint} label={`Help for ${label}`} /> : null}
@@ -34,7 +38,6 @@ export function ApplyField({
   );
 }
 
-export const applyInputClassName =
-  "w-full rounded-xl border border-deep-teal/12 bg-pure-white px-4 py-3 text-sm text-deep-teal shadow-sm shadow-deep-teal/[0.03] outline-none transition-all placeholder:text-deep-teal/30 focus:border-pacific-teal focus:ring-4 focus:ring-pacific-teal/10";
+export const applyInputClassName = authGlassInputClassName;
 
 export const applySelectClassName = applyInputClassName;

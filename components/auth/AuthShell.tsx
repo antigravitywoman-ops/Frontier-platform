@@ -191,3 +191,9 @@ export const authGlassLinkClassName =
 
 export const authGlassDisclaimerClassName =
   "mt-6 font-sans text-xs leading-relaxed text-pure-white/58";
+
+export const glassSecondaryButtonClassName =
+  "inline-flex w-full items-center justify-center gap-2 rounded-full border border-pure-white/30 bg-pure-white/10 px-5 py-3 font-sans text-sm font-medium text-pure-white shadow-[inset_0_1px_0_rgb(255_255_255/0.2)] backdrop-blur-md transition-all hover:border-pure-white/45 hover:bg-pure-white/18";
+
+export const glassPrimaryButtonClassName =
+  "inline-flex items-center justify-center rounded-full border border-pure-white/30 bg-pure-white/18 px-7 py-3 font-sans text-sm font-semibold text-pure-white shadow-[inset_0_1px_0_rgb(255_255_255/0.35)] backdrop-blur-md transition-all hover:border-pure-white/45 hover:bg-pure-white/26 disabled:cursor-not-allowed disabled:opacity-60";

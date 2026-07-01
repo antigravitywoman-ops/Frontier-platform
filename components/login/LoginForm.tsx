@@ -13,6 +13,8 @@ import {
   authGlassInputClassName,
   authGlassLabelClassName,
   authGlassTitleClassName,
+  glassPrimaryButtonClassName,
+  glassSecondaryButtonClassName,
 } from "@/components/auth/AuthShell";
 import { DEFAULT_LOGIN_ROLES, RoleToggle } from "@/components/auth/RoleToggle";
 import { useAuth } from "@/context/AuthProvider";
@@ -24,9 +26,6 @@ import { showError, toast } from "@/lib/toast";
 type LoginFormProps = {
   fixedRole?: Extract<UserRole, "admin" | "affiliate" | "doctor">;
 };
-
-const glassSecondaryButtonClassName =
-  "inline-flex w-full items-center justify-center gap-2 rounded-full border border-pure-white/30 bg-pure-white/10 px-5 py-3 font-sans text-sm font-medium text-pure-white shadow-[inset_0_1px_0_rgb(255_255_255/0.2)] backdrop-blur-md transition-all hover:border-pure-white/45 hover:bg-pure-white/18";
 
 const ROLE_SPECIFIC_HEADINGS: Record<
   Extract<UserRole, "admin" | "affiliate" | "doctor" | "patient">,
@@ -233,7 +232,7 @@ export function LoginForm({ fixedRole }: LoginFormProps = {}) {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full rounded-full border border-pure-white/30 bg-pure-white/18 px-6 py-3.5 font-sans text-sm font-semibold text-pure-white shadow-[inset_0_1px_0_rgb(255_255_255/0.35)] backdrop-blur-md transition-all hover:border-pure-white/45 hover:bg-pure-white/26 disabled:cursor-not-allowed disabled:opacity-60"
+              className={`w-full ${glassPrimaryButtonClassName}`}
             >
               {isSubmitting ? "Signing in…" : "Sign in"}
             </button>

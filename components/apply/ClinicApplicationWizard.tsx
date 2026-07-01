@@ -1,14 +1,19 @@
 "use client";
 
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ApplyShell } from "@/components/apply/ApplyShell";
+import { glassPrimaryButtonClassName } from "@/components/auth/AuthShell";
 import { StepBanking } from "@/components/apply/wizard/StepBanking";
 import { StepDocuments } from "@/components/apply/wizard/StepDocuments";
 import { StepPracticeInfo } from "@/components/apply/wizard/StepPracticeInfo";
 import { motion, transition } from "@/components/motion";
 import { submitClinicApplication, uploadClinicDocuments } from "@/lib/apply/api";
+import {
+  getNextPracticeTab,
+  getPracticeTabLabel,
+  type PracticeTabId,
+} from "@/lib/apply/practice-tabs";
 import { storeApplicationSummary } from "@/lib/apply/storage";
 import {
   INITIAL_BANKING,
@@ -21,6 +26,7 @@ import {
   validateBankingStep,
   validateDocumentsStep,
   validatePracticeStep,
+  validatePracticeTab,
 } from "@/lib/apply/validation";
 import { showError, toast } from "@/lib/toast";
 
@@ -30,6 +36,7 @@ export function ClinicApplicationWizard() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [step, setStep] = useState(1);
+  const [practiceTab, setPracticeTab] = useState<PracticeTabId>("contact");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [state, setState] = useState<ApplicationWizardState>({
     practice: {
@@ -66,6 +73,34 @@ export function ClinicApplicationWizard() {
     }
 
     setStep(nextStep);
+  }
+
+  function handleNext() {
+    if (step === 1) {
+      const tabError = validatePracticeTab(practiceTab, state.practice);
+      if (tabError) {
+        showError(new Error(tabError));
+        return;
+      }
+
+      const nextPracticeTab = getNextPracticeTab(practiceTab);
+      if (nextPracticeTab) {
+        setPracticeTab(nextPracticeTab);
+        return;
+      }
+
+      const error = validatePracticeStep(state.practice);
+      if (error) {
+        showError(new Error(error));
+        return;
+      }
+      setStep(2);
+      return;
+    }
+
+    if (step === 2) {
+      selectTab(3);
+    }
   }
 
   async function handleSubmit() {
@@ -111,34 +146,35 @@ export function ClinicApplicationWizard() {
     }
   }
 
-  const footer = (
-    <>
-      <Link
-        href="/login"
-        className="text-sm font-light text-deep-teal/55 transition-colors hover:text-deep-teal"
-      >
-        Already have an account? Sign in
-      </Link>
+  const nextLabel = (() => {
+    if (step === 1) {
+      const nextPracticeTab = getNextPracticeTab(practiceTab);
+      if (nextPracticeTab) {
+        return `Next: ${getPracticeTabLabel(nextPracticeTab)}`;
+      }
+      return "Next: Documents";
+    }
+    if (step === 2) return "Next: Banking";
+    return "Submit application";
+  })();
 
+  const footer = (
+    <div className="flex w-full justify-center">
       {step < FINAL_STEP ? (
-        <button
-          type="button"
-          onClick={() => selectTab(step + 1)}
-          className="ml-auto rounded-full bg-deep-teal px-7 py-3 text-sm font-light text-pure-white shadow-lg shadow-deep-teal/15 transition-all hover:bg-pacific-teal"
-        >
-          Next: {step === 1 ? "Documents" : "Banking"}
+        <button type="button" onClick={handleNext} className={glassPrimaryButtonClassName}>
+          {nextLabel}
         </button>
       ) : (
         <button
           type="button"
           onClick={() => void handleSubmit()}
           disabled={isSubmitting}
-          className="ml-auto rounded-full bg-deep-teal px-7 py-3 text-sm font-light text-pure-white shadow-lg shadow-deep-teal/15 transition-all hover:bg-pacific-teal disabled:cursor-not-allowed disabled:opacity-60"
+          className={glassPrimaryButtonClassName}
         >
           {isSubmitting ? "Submitting…" : "Submit application"}
         </button>
       )}
-    </>
+    </div>
   );
 
   return (
@@ -148,15 +184,17 @@ export function ClinicApplicationWizard() {
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={transition}
-        className="flex h-full min-h-0 flex-col"
+        className="flex flex-col"
       >
-        <div className="h-full min-h-0 flex-1">
-          {step === 1 ? (
-            <StepPracticeInfo
-              value={state.practice}
-              onChange={(practice) => setState((current) => ({ ...current, practice }))}
-            />
-          ) : null}
+        <div>
+        {step === 1 ? (
+          <StepPracticeInfo
+            value={state.practice}
+            onChange={(practice) => setState((current) => ({ ...current, practice }))}
+            activeTab={practiceTab}
+            onTabChange={setPracticeTab}
+          />
+        ) : null}
           {step === 2 ? (
             <StepDocuments
               value={state.documents}

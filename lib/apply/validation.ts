@@ -1,3 +1,6 @@
+import type { PracticeTabId } from "@/lib/apply/practice-tabs";
+import type { PracticeInfo } from "@/lib/apply/types";
+
 const MAX_FILE_BYTES = 10 * 1024 * 1024;
 const ALLOWED_DOCUMENT_TYPES = [
   "application/pdf",
@@ -41,9 +44,51 @@ export function validateApplicationFile(file: File, imagesOnly = false): string 
   return null;
 }
 
-export function validatePracticeStep(
-  practice: import("@/lib/apply/types").PracticeInfo,
+export function validatePracticeTab(
+  tab: PracticeTabId,
+  practice: PracticeInfo,
 ): string | null {
+  switch (tab) {
+    case "contact":
+      if (!practice.firstName.trim()) return "First name is required.";
+      if (!practice.lastName.trim()) return "Last name is required.";
+      if (!practice.phone.trim()) return "Phone is required.";
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(practice.email.trim())) {
+        return "Enter a valid email address.";
+      }
+      return null;
+    case "practice":
+      if (practice.clinicName.trim().length < 2) {
+        return "Clinic name must be at least 2 characters.";
+      }
+      if (!practice.website.trim()) return "Website is required.";
+      if (!practice.taxId.trim()) return "Tax ID is required.";
+      if (!practice.resellerPermitNumber.trim()) {
+        return "Reseller permit number is required.";
+      }
+      if (
+        practice.affiliateCode.trim() &&
+        !AFFILIATE_CODE_PATTERN.test(practice.affiliateCode.trim())
+      ) {
+        return "Affiliate code must be exactly 8 characters.";
+      }
+      return null;
+    case "credentials":
+      return null;
+    case "address":
+      if (!practice.address1.trim()) return "Street address is required.";
+      if (!practice.city.trim()) return "City is required.";
+      if (!practice.state.trim()) return "State is required.";
+      if (!/^\d{5}(-\d{4})?$/.test(practice.zip.trim())) {
+        return "Enter a valid ZIP code.";
+      }
+      return null;
+    default:
+      return null;
+  }
+}
+
+export function validatePracticeStep(practice: PracticeInfo): string | null {
   if (!practice.firstName.trim()) return "First name is required.";
   if (!practice.lastName.trim()) return "Last name is required.";
   if (practice.clinicName.trim().length < 2) {

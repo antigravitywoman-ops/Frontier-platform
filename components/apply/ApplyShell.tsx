@@ -4,6 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { ApplyTabs } from "@/components/apply/wizard/ApplyTabs";
+import {
+  authGlassDescriptionClassName,
+  authGlassEyebrowClassName,
+  authGlassTitleClassName,
+  glassSecondaryButtonClassName,
+} from "@/components/auth/AuthShell";
 import { WIZARD_STEPS } from "@/lib/apply/types";
 
 const STEP_DESCRIPTIONS: Record<number, string> = {
@@ -33,67 +39,70 @@ export function ApplyShell({
   const stepMeta = WIZARD_STEPS.find((step) => step.id === currentStep);
 
   return (
-    <div className="h-dvh overflow-hidden bg-surface-muted lg:grid lg:grid-cols-[minmax(300px,38%)_1fr]">
-      <aside className="relative hidden overflow-hidden lg:block">
-        <Image
-          src="/brand/merch-jacket-embroidered-logo.png"
-          alt=""
-          fill
-          priority
-          aria-hidden="true"
-          className="object-cover object-center"
-          sizes="40vw"
-        />
+    <div className="flex h-dvh w-full flex-col overflow-hidden bg-[#0D717B] lg:flex-row">
+      <aside className="relative hidden h-full min-h-0 shrink-0 overflow-hidden bg-[#3f8b98] lg:block lg:w-1/2">
+        <div className="absolute -inset-10">
+          <Image
+            src="/assets/login/login.png"
+            alt=""
+            fill
+            priority
+            aria-hidden="true"
+            className="object-cover object-center"
+            sizes="50vw"
+          />
+        </div>
       </aside>
 
-      <main className="flex h-dvh min-h-0 flex-col" data-tour="apply-form">
-        <header className="shrink-0 border-b border-deep-teal/8 bg-pure-white/90 px-4 py-4 backdrop-blur-sm sm:px-8 lg:px-10">
-          <div className="mx-auto flex max-w-3xl flex-col gap-4">
-            <div className="flex items-start justify-between gap-4">
-              <div className="min-w-0 lg:hidden">
-                <p className="font-sans text-[10px] font-light text-pacific-teal">
-                  Clinic application
-                </p>
-                <h1 className="mt-1 truncate font-sans text-xl font-light text-deep-teal">
-                  {stepMeta?.label}
-                </h1>
-              </div>
-              <div className="hidden min-w-0 lg:block">
-                <p className="font-sans text-[10px] font-light text-pacific-teal">
-                  Clinic application
-                </p>
-                <h1 className="mt-2 font-sans text-2xl font-light tracking-[-0.02em] text-deep-teal">
-                  {stepMeta?.label}
-                </h1>
-                <p className="mt-1 text-sm text-deep-teal/55">{STEP_DESCRIPTIONS[currentStep]}</p>
-              </div>
-              <Link
-                href="/login"
-                className="shrink-0 text-sm font-light text-pacific-teal hover:underline"
-              >
-                Sign in
-              </Link>
-            </div>
-
-            <ApplyTabs
-              tabs={MAIN_TABS}
-              activeId={String(currentStep)}
-              onChange={(id) => onTabChange(Number(id))}
-              variant="primary"
-            />
-          </div>
-        </header>
-
-        <div className="min-h-0 flex-1 px-4 py-4 sm:px-8 sm:py-5 lg:px-10">
-          <div className="mx-auto flex h-full max-w-3xl min-h-0 flex-col">{children}</div>
+      <div className="relative flex h-full min-h-0 w-full flex-col overflow-hidden lg:w-1/2">
+        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#094f57] via-[#0D717B] to-[#1aa3ad]" />
+          <div className="absolute -left-24 top-[12%] size-80 rounded-full bg-[#3ec5cf]/25 blur-3xl" />
+          <div className="absolute -right-20 bottom-[8%] size-96 rounded-full bg-[#011a24]/25 blur-3xl" />
+          <div className="absolute left-1/3 top-1/2 size-64 -translate-y-1/2 rounded-full bg-pure-white/10 blur-3xl" />
         </div>
 
-        <footer className="shrink-0 border-t border-deep-teal/8 bg-pure-white/95 px-4 py-4 backdrop-blur-md sm:px-8 lg:px-10">
-          <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-between gap-3">
-            {footer}
+        <div className="relative z-[1] flex h-full min-h-0 flex-col px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
+          <div className="glass-ios glass-ios-panel flex min-h-0 flex-1 flex-col overflow-hidden">
+            <header className="shrink-0 border-b border-pure-white/10 px-4 py-4 sm:px-6">
+              <div className="mx-auto max-w-3xl text-center">
+                <p className={authGlassEyebrowClassName}>Clinic application</p>
+                <h1 className={authGlassTitleClassName}>{stepMeta?.label}</h1>
+                <p className={`${authGlassDescriptionClassName} mx-auto mt-2 max-w-md text-balance`}>
+                  {STEP_DESCRIPTIONS[currentStep]}
+                </p>
+                <ApplyTabs
+                  tabs={MAIN_TABS}
+                  activeId={String(currentStep)}
+                  onChange={(id) => onTabChange(Number(id))}
+                  variant="primary"
+                  appearance="glass"
+                  className="mt-4"
+                />
+              </div>
+            </header>
+
+            <div className="flex flex-1 flex-col overflow-hidden px-4 py-3 sm:px-6 sm:py-4" data-tour="apply-form">
+              <div className="mx-auto flex w-full max-w-3xl flex-col">{children}</div>
+            </div>
+
+            <footer className="shrink-0 border-t border-pure-white/10 px-4 py-4 sm:px-6">
+              <div className="mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-3">
+                {footer}
+              </div>
+            </footer>
           </div>
-        </footer>
-      </main>
+
+          <div className="mt-4 grid shrink-0 grid-cols-1 gap-3 sm:grid-cols-2">
+            <Link href="/" className={glassSecondaryButtonClassName}>
+              Back to home
+            </Link>
+            <Link href="/login" className={glassSecondaryButtonClassName}>
+              Sign in
+            </Link>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
