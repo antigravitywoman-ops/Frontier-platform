@@ -1,0 +1,144 @@
+"use client";
+
+import { useMemo, useState } from "react";
+import { PortalPageShell } from "@/components/portal/shared/PortalPageShell";
+import { toolbarBtnClass, toolbarBtnPrimaryClass } from "@/components/portal/shared/PortalPageToolbar";
+import {
+  COMPLIANCE_STATUS_LABELS,
+  type AuditLogEntry,
+  type ClinicCompliance,
+  type ComplianceStatus,
+} from "@/lib/admin/types";
+
+const COMPLIANCE_ROWS: ClinicCompliance[] = [];
+const AUDIT_LOG_ENTRIES: AuditLogEntry[] = [];
+import { fuseSearch } from "@/lib/search/fuse";
+import { AUDIT_LOG_SEARCH_KEYS } from "@/lib/search/keys";
+import { toast } from "@/lib/toast";
+
+function StatusCell({ status }: { status: ComplianceStatus }) {
+  const styles: Record<ComplianceStatus, string> = {
+    verified: "text-pacific-teal",
+    pending: "text-deep-teal/60",
+    expired: "text-coral-blush",
+    missing: "text-deep-teal",
+  };
+  return <span className={`text-xs font-light ${styles[status]}`}>{COMPLIANCE_STATUS_LABELS[status]}</span>;
+}
+
+export function AdminComplianceView() {
+  const [tab, setTab] = useState<"compliance" | "audit">("compliance");
+  const [auditSearch, setAuditSearch] = useState("");
+  const [actionFilter, setActionFilter] = useState("all");
+
+  const auditEntries = useMemo(() => {
+    let list = fuseSearch(AUDIT_LOG_ENTRIES, auditSearch, AUDIT_LOG_SEARCH_KEYS);
+    if (actionFilter !== "all") {
+      list = list.filter((entry) => entry.action.startsWith(actionFilter));
+    }
+    return list;
+  }, [auditSearch, actionFilter]);
+
+  const actionTypes = useMemo(
+    () => Array.from(new Set(AUDIT_LOG_ENTRIES.map((e) => e.action.split(".")[0]))),
+    [],
+  );
+
+  return (
+    <PortalPageShell
+      title={tab === "compliance" ? "Compliance" : "Audit Log"}
+      subtitle={
+        tab === "compliance"
+          ? "Clinic credential verification status"
+          : "Timestamped platform activity"
+      }
+      actions={
+        <>
+          <button
+            type="button"
+            onClick={() => setTab("compliance")}
+            className={tab === "compliance" ? toolbarBtnPrimaryClass : toolbarBtnClass}
+          >
+            Compliance
+          </button>
+          <button
+            type="button"
+            onClick={() => setTab("audit")}
+            className={tab === "audit" ? toolbarBtnPrimaryClass : toolbarBtnClass}
+          >
+            Audit Log
+          </button>
+        </>
+      }
+    >
+      {tab === "compliance" ? (
+        <div className="overflow-x-auto provider-dash-card">
+            <table className="min-w-full text-left text-sm">
+              <thead className="border-b border-deep-teal/10 bg-deep-teal/[0.02] text-xs uppercase tracking-wide text-deep-teal/45">
+                <tr>
+                  <th className="px-4 py-3">Clinic</th>
+                  <th className="px-4 py-3">NPI</th>
+                  <th className="px-4 py-3">DEA</th>
+                  <th className="px-4 py-3">State License</th>
+                  <th className="px-4 py-3">Agreement</th>
+                  <th className="px-4 py-3">Last Verified</th>
+                  <th className="px-4 py-3">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {COMPLIANCE_ROWS.map((row) => (
+                  <tr key={row.id} className="border-b border-deep-teal/5">
+                    <td className="px-4 py-3 font-light text-deep-teal">{row.clinicName}</td>
+                    <td className="px-4 py-3"><StatusCell status={row.npiStatus} /></td>
+                    <td className="px-4 py-3"><StatusCell status={row.deaStatus} /></td>
+                    <td className="px-4 py-3"><StatusCell status={row.stateLicenseStatus} /></td>
+                    <td className="px-4 py-3"><StatusCell status={row.providerAgreementStatus} /></td>
+                    <td className="px-4 py-3 text-deep-teal/70">{row.lastVerified}</td>
+                    <td className="px-4 py-3">
+                      <button type="button" onClick={() => toast.info(`Reviewing ${row.clinicName} compliance.`)} className="text-xs text-pacific-teal hover:underline">Review</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {COMPLIANCE_ROWS.length === 0 ? (
+              <p className="px-4 py-10 text-center text-sm text-deep-teal/50">No compliance records yet.</p>
+            ) : null}
+          </div>
+      ) : (
+        <>
+          <div className="flex flex-wrap gap-3">
+            <input type="search" value={auditSearch} onChange={(e) => setAuditSearch(e.target.value)} placeholder="Search actor, action, entity…" className="min-w-[200px] flex-1 rounded-xl border border-deep-teal/15 px-3 py-2 text-sm" />
+            <select value={actionFilter} onChange={(e) => setActionFilter(e.target.value)} className="rounded-xl border border-deep-teal/15 px-3 py-2 text-sm">
+              <option value="all">All actions</option>
+              {actionTypes.map((type) => (
+                <option key={type} value={type}>{type}</option>
+              ))}
+            </select>
+          </div>
+          <div className="space-y-3">
+            {auditEntries.length === 0 ? (
+              <p className="rounded-xl border border-dashed border-deep-teal/15 px-6 py-12 text-center text-sm text-deep-teal/50">
+                No audit log entries yet.
+              </p>
+            ) : null}
+            {auditEntries.map((entry) => (
+              <article key={entry.id} className="rounded-xl border border-deep-teal/10 bg-pure-white p-4 shadow-sm">
+                <div className="flex flex-wrap items-start justify-between gap-2">
+                  <p className="font-mono text-xs text-deep-teal/45">{new Date(entry.timestamp).toLocaleString()}</p>
+                  <span className="rounded-full bg-deep-teal/5 px-2 py-0.5 text-[10px] font-light text-deep-teal/60">{entry.action}</span>
+                </div>
+                <p className="mt-2 text-sm text-deep-teal"><span className="text-deep-teal/50">Actor:</span> {entry.actor}</p>
+                <p className="text-sm text-deep-teal"><span className="text-deep-teal/50">Entity:</span> {entry.entity}</p>
+                <div className="mt-3 grid gap-2 rounded-lg bg-deep-teal/[0.03] p-3 text-xs sm:grid-cols-2">
+                  <div><span className="text-deep-teal/45">Before:</span> <span className="font-mono text-xs text-deep-teal">{entry.before}</span></div>
+                  <div><span className="text-deep-teal/45">After:</span> <span className="font-mono text-xs text-deep-teal">{entry.after}</span></div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </>
+      )}
+    </PortalPageShell>
+  );
+}

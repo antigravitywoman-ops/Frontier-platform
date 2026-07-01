@@ -1,0 +1,73 @@
+import {
+  FrontierBarChart3Icon,
+  FrontierCalculatorIcon,
+  FrontierClipboardCheckIcon,
+  FrontierCopyIcon,
+  FrontierDollarSignIcon,
+  FrontierFolderTreeIcon,
+  FrontierHandshakeIcon,
+  FrontierHelpCircleIcon,
+  FrontierLayoutGridIcon,
+  FrontierLink2Icon,
+  FrontierMailIcon,
+  FrontierPackageIcon,
+  FrontierPackagePlusIcon,
+  FrontierSearchIcon,
+  FrontierSendIcon,
+  FrontierShoppingBagIcon,
+  FrontierStoreIcon,
+  FrontierUploadIcon,
+  FrontierUserIcon,
+  FrontierUsersIcon,
+  FrontierWalletIcon,
+  FrontierWarehouseIcon,
+} from "@/components/icons/frontier/frontier-glyphs";
+import { createFrontierBrandIcon } from "@/components/icons/frontier/FrontierAssetIcon";
+
+/** Dashboard section / toolbar brand PNG icons */
+export const frontierBrandIcons = {
+  mail: createFrontierBrandIcon("mail", FrontierMailIcon, "FrontierBrandMailIcon"),
+  search: createFrontierBrandIcon("search", FrontierSearchIcon, "FrontierBrandSearchIcon"),
+  pieChart: createFrontierBrandIcon("pieChart", FrontierBarChart3Icon, "FrontierBrandPieChartIcon"),
+  wallet: createFrontierBrandIcon("wallet", FrontierWalletIcon, "FrontierBrandWalletIcon"),
+  home: createFrontierBrandIcon("home", FrontierStoreIcon, "FrontierBrandHomeIcon"),
+  cards: createFrontierBrandIcon("cards", FrontierCopyIcon, "FrontierBrandCardsIcon"),
+  forward: createFrontierBrandIcon("forward", FrontierSendIcon, "FrontierBrandForwardIcon"),
+  location: createFrontierBrandIcon("location", FrontierLink2Icon, "FrontierBrandLocationIcon"),
+  folder: createFrontierBrandIcon("folder", FrontierFolderTreeIcon, "FrontierBrandFolderIcon"),
+  add: createFrontierBrandIcon("add", FrontierUploadIcon, "FrontierBrandAddIcon"),
+  headset: createFrontierBrandIcon("headset", FrontierHelpCircleIcon, "FrontierBrandHeadsetIcon"),
+  notification: createFrontierBrandIcon(
+    "notification",
+    FrontierUsersIcon,
+    "FrontierBrandNotificationIcon",
+  ),
+  user: createFrontierBrandIcon("user", FrontierUserIcon, "FrontierBrandUserIcon"),
+  grid: createFrontierBrandIcon("grid", FrontierLayoutGridIcon, "FrontierBrandGridIcon"),
+  priceTag: createFrontierBrandIcon(
+    "priceTag",
+    FrontierShoppingBagIcon,
+    "FrontierBrandPriceTagIcon",
+  ),
+  package: createFrontierBrandIcon("cards", FrontierPackageIcon, "FrontierBrandPackageIcon"),
+  packagePlus: createFrontierBrandIcon(
+    "add",
+    FrontierPackagePlusIcon,
+    "FrontierBrandPackagePlusIcon",
+  ),
+  dollarSign: createFrontierBrandIcon(
+    "priceTag",
+    FrontierDollarSignIcon,
+    "FrontierBrandDollarSignIcon",
+  ),
+  warehouse: createFrontierBrandIcon(
+    "folder",
+    FrontierWarehouseIcon,
+    "FrontierBrandWarehouseIcon",
+  ),
+  analytics: createFrontierBrandIcon(
+    "analytics",
+    FrontierHandshakeIcon,
+    "FrontierBrandAnalyticsIcon",
+  ),
+} as const;
