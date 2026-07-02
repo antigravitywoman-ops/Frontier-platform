@@ -81,8 +81,8 @@ export const PATIENT_ONBOARDING_SUBTITLE =
 
 export function loginPathForBackendRole(role: string): string {
   const normalized = role.toLowerCase();
-  if (normalized === "admin" || normalized === "super_admin") return "/login/admin";
-  if (normalized === "affiliate") return "/login/affiliate";
+  if (normalized === "admin" || normalized === "super_admin") return "/login?role=admin";
+  if (normalized === "affiliate") return "/login?role=affiliate";
   if (normalized === "patient") return "/login?role=patient";
   return "/login";
 }

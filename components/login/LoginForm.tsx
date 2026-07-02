@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { startTransition, useEffect, useState } from "react";
 import {
   AuthCard,
@@ -49,10 +49,7 @@ const ROLE_SPECIFIC_HEADINGS: Record<
   },
 };
 
-function getLoginHeading(
-  role: UserRole,
-  fixedRole?: Extract<UserRole, "admin" | "affiliate" | "doctor">,
-) {
+function getLoginHeading(role: UserRole, fixedRole?: UserRole) {
   const effectiveRole = fixedRole ?? role;
 
   if (
@@ -69,14 +66,6 @@ function getLoginHeading(
 
 const ROLE_QUERY_VALUES = ["admin", "affiliate", "doctor", "patient"] as const;
 
-function roleFromPathname(
-  pathname: string,
-): Extract<UserRole, "admin" | "affiliate"> | undefined {
-  if (pathname === "/login/admin") return "admin";
-  if (pathname === "/login/affiliate") return "affiliate";
-  return undefined;
-}
-
 function roleFromSearchParams(
   searchParams: ReturnType<typeof useSearchParams>,
 ): UserRole | undefined {
@@ -90,9 +79,8 @@ function roleFromSearchParams(
 export function LoginForm({ fixedRole }: LoginFormProps = {}) {
   const { login } = useAuth();
   const router = useRouter();
-  const pathname = usePathname();
   const searchParams = useSearchParams();
-  const resolvedFixedRole = fixedRole ?? roleFromPathname(pathname);
+  const resolvedFixedRole = fixedRole ?? roleFromSearchParams(searchParams);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState<UserRole>(

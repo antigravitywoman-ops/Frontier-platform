@@ -1,8 +1,9 @@
 import {
   AUTH_ROLE_COOKIE,
   AUTH_TOKEN_COOKIE,
+  isLegacyLoginRoute,
   isLoginRoute,
-  loginPathForPortalPath,
+  LOGIN_PATH,
   PORTAL_PATHS,
 } from "@/lib/auth/constants";
 import type { UserRole } from "@/lib/auth/types";
@@ -79,10 +80,8 @@ export function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  if (pathname === "/patient/login") {
-    const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("role", "patient");
-    return NextResponse.redirect(loginUrl);
+  if (pathname === "/patient/login" || pathname === "/login/admin" || pathname === "/login/affiliate") {
+    return NextResponse.redirect(new URL(LOGIN_PATH, request.url));
   }
 
   const auth = readAuthFromRequest(request);
@@ -94,12 +93,10 @@ export function proxy(request: NextRequest) {
   }
 
   if (!isAuthenticated && pathname.startsWith("/portal")) {
-    const loginUrl = new URL(loginPathForPortalPath(pathname), request.url);
-    loginUrl.searchParams.set("redirect", pathname);
-    return redirectWithOptionalCookieClear(request, loginUrl, staleAuthCookies);
+    return redirectWithOptionalCookieClear(request, new URL(LOGIN_PATH, request.url), staleAuthCookies);
   }
 
-  if (!isAuthenticated && isLoginRoute(pathname)) {
+  if (!isAuthenticated && (isLoginRoute(pathname) || isLegacyLoginRoute(pathname))) {
     if (staleAuthCookies) {
       const response = NextResponse.next();
       clearAuthCookies(response);

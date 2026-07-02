@@ -16,6 +16,7 @@ import {
   readSession,
 } from "@/lib/auth/storage";
 import type { AuthSession, LoginCredentials } from "@/lib/auth/types";
+import { LOGIN_PATH } from "@/lib/auth/constants";
 import { bootstrapPortal, resetPortalBootstrap } from "@/lib/bootstrap/portal-bootstrap";
 import { toast } from "@/lib/toast";
 
@@ -86,7 +87,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     clearSession();
     get().setSession(null);
     toast.error("Your session has expired. Please sign in again.");
-    window.location.assign("/login");
+    window.location.replace(LOGIN_PATH);
   },
 
   refreshSession: async () => {
@@ -127,6 +128,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     resetPortalBootstrap();
     get().setSession(null);
     toast.success("Signed out successfully.");
-    window.location.assign("/");
+    window.location.replace(LOGIN_PATH);
   },
 }));

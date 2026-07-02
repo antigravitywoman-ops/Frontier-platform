@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthProvider";
-import { loginPathForPortalPath, PORTAL_PATHS } from "@/lib/auth/constants";
+import { LOGIN_PATH, PORTAL_PATHS } from "@/lib/auth/constants";
 
 export function PortalAuthGuard({ children }: { children: React.ReactNode }) {
   const { session, isLoading } = useAuth();
@@ -16,9 +16,7 @@ export function PortalAuthGuard({ children }: { children: React.ReactNode }) {
 
     if (!session) {
       redirectingRef.current = true;
-      const loginPath = loginPathForPortalPath(pathname);
-      const redirect = `${loginPath}?redirect=${encodeURIComponent(pathname)}`;
-      window.location.assign(redirect);
+      window.location.replace(LOGIN_PATH);
       return;
     }
 

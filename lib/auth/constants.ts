@@ -1,3 +1,5 @@
+import type { UserRole } from "@/lib/auth/types";
+
 export const AUTH_TOKEN_COOKIE = "frontier-auth-token";
 export const AUTH_ROLE_COOKIE = "frontier-auth-role";
 export const AUTH_STORAGE_KEY = "frontier-auth-session";
@@ -17,18 +19,18 @@ export const PORTAL_PATHS = {
   doctor: "/portal/doctor",
 } as const;
 
+export const LOGIN_PATH = "/login";
+
 export const LOGIN_PATHS = {
-  affiliate: "/login/affiliate",
-  admin: "/login/admin",
-  patient: "/login",
-  doctor: "/login",
+  affiliate: `${LOGIN_PATH}?role=affiliate`,
+  admin: `${LOGIN_PATH}?role=admin`,
+  patient: `${LOGIN_PATH}?role=patient`,
+  doctor: LOGIN_PATH,
 } as const;
 
 export const PUBLIC_ROUTES = [
   "/",
-  "/login",
-  "/login/admin",
-  "/login/affiliate",
+  LOGIN_PATH,
   "/login/send-otp",
   "/login/verify-otp",
   "/forgot-password",
@@ -40,12 +42,27 @@ export const PUBLIC_ROUTES = [
   "/apply/submitted",
 ] as const;
 
+export function buildLoginUrl(options?: { role?: UserRole; redirect?: string }) {
+  const params = new URLSearchParams();
+
+  if (options?.role && options.role !== "doctor") {
+    params.set("role", options.role);
+  }
+
+  if (options?.redirect) {
+    params.set("redirect", options.redirect);
+  }
+
+  const query = params.toString();
+  return query ? `${LOGIN_PATH}?${query}` : LOGIN_PATH;
+}
+
 export function loginPathForRole(role: keyof typeof LOGIN_PATHS) {
   return LOGIN_PATHS[role];
 }
 
 export function loginPathForPortalPath(pathname: string) {
-  if (pathname.startsWith("/portal/patient")) return "/login?role=patient";
+  if (pathname.startsWith("/portal/patient")) return LOGIN_PATHS.patient;
   if (pathname.startsWith("/portal/admin")) return LOGIN_PATHS.admin;
   if (pathname.startsWith("/portal/affiliate")) return LOGIN_PATHS.affiliate;
   return LOGIN_PATHS.doctor;
@@ -53,10 +70,12 @@ export function loginPathForPortalPath(pathname: string) {
 
 export function isLoginRoute(pathname: string) {
   return (
-    pathname === LOGIN_PATHS.doctor ||
-    pathname === LOGIN_PATHS.admin ||
-    pathname === LOGIN_PATHS.affiliate ||
+    pathname === LOGIN_PATH ||
     pathname === "/login/send-otp" ||
     pathname === "/login/verify-otp"
   );
+}
+
+export function isLegacyLoginRoute(pathname: string) {
+  return pathname === "/login/admin" || pathname === "/login/affiliate";
 }

@@ -21,6 +21,7 @@ import { PROFIT_TIER_COLORS } from "@/lib/finance/types";
 
 type TopProductsChartProps = {
   data: ProductProfitRow[];
+  compact?: boolean;
 };
 
 function formatCurrency(value: number) {
@@ -31,7 +32,7 @@ function formatCurrency(value: number) {
   }).format(value);
 }
 
-export function TopProductsChart({ data }: TopProductsChartProps) {
+export function TopProductsChart({ data, compact = false }: TopProductsChartProps) {
   const chartData = [...data]
     .sort((a, b) => b.profit - a.profit)
     .slice(0, 8)
@@ -41,7 +42,7 @@ export function TopProductsChart({ data }: TopProductsChartProps) {
     }));
 
   return (
-    <div className="h-80 w-full">
+    <div className={`w-full ${compact ? "h-52" : "h-80"}`}>
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={chartData}

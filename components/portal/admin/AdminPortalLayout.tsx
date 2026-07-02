@@ -9,6 +9,7 @@ import { AdminOrdersProvider } from "@/context/OrdersProvider";
 import { useAuth } from "@/context/AuthProvider";
 
 const ADMIN_LINKS: SidebarLink[] = [
+  { href: "/portal/admin", label: "Dashboard", icon: frontierSidebarIcons.layoutGrid },
   { href: "/portal/admin/approvals", label: "Approval Queue", icon: frontierSidebarIcons.clipboardCheck },
   { href: "/portal/admin/users", label: "Users", icon: frontierSidebarIcons.users },
   { href: "/portal/admin/catalog", label: "Catalog", icon: frontierSidebarIcons.layoutGrid },

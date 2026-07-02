@@ -2585,3 +2585,27 @@ a {
   background: var(--color-pure-white);
   box-shadow: 0 2px 12px rgb(1 26 36 / 0.04);
 }
+
+/* Sonner toasts — translucent glass (see AppProviders TOAST_CLASS_NAMES) */
+[data-sonner-toast][data-styled="true"] {
+  background: transparent !important;
+  border-color: transparent !important;
+  color: rgb(255 255 255);
+}
+
+[data-sonner-toast] [data-title] {
+  color: rgb(255 255 255);
+}
+
+[data-sonner-toast] [data-description] {
+  color: rgb(255 255 255 / 0.75);
+}
+
+[data-sonner-toast] [data-icon] svg {
+  color: rgb(255 255 255);
+}
+
+[data-sonner-toast] .sonner-loader {
+  border-color: rgb(255 255 255 / 0.25);
+  border-top-color: rgb(255 255 255);
+}

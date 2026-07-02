@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
+import { AdminDashboard } from "@/components/portal/admin/AdminDashboard";
 
 export default function AdminDashboardPage() {
-  redirect("/portal/admin/approvals");
+  return <AdminDashboard />;
 }
